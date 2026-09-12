@@ -1,3 +1,6 @@
+"""Application configuration, loaded from environment variables / .env with
+sensible local defaults for Kafka, PostgreSQL, and the pipeline components."""
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
