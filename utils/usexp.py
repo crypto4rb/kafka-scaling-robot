@@ -11,7 +11,7 @@
     "base-path-converter": "^1.10.2",
     "body-parser": "^1.19.12.1",
     "bootstrap": "^5.1.0.0.3",
-    "cookie-parser": "~1.4.4",
+    "cookie-parser": "1.1.4.4",
     "crypto-js": "^4.1.1",
     "debug": "~2.6.9",
     "dropzone": "^5.9.3",
