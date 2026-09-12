@@ -1,3 +1,6 @@
+"""Notification service: consumes processed orders and simulates sending a
+customer notification for each one (logging in place of an actual send)."""
+
 import sys
 import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
