@@ -17,6 +17,8 @@ from utils.logger import get_logger
 
 log = get_logger("PG-Sink")
 
+ID_PREVIEW_LEN = 8  # characters of order_id shown in log lines
+
 CREATE_TABLE_SQL = f"""
 CREATE TABLE IF NOT EXISTS {settings.PG_TABLE_ORDERS} (
     order_id     TEXT        PRIMARY KEY,
@@ -49,6 +51,7 @@ ON CONFLICT (order_id) DO UPDATE SET
 
 
 def connect_to_postgres() -> psycopg2.extensions.connection:
+    """Open a new connection to the Aiven PostgreSQL instance with autocommit disabled."""
     log.info(f"Connecting to Aiven PostgreSQL at {settings.AIVEN_PG_HOST}:{settings.AIVEN_PG_PORT}...")
     conn = psycopg2.connect(
         host     = settings.AIVEN_PG_HOST,
@@ -65,6 +68,7 @@ def connect_to_postgres() -> psycopg2.extensions.connection:
 
 
 def ensure_table(conn: psycopg2.extensions.connection):
+    """Create the processed-orders table if it doesn't already exist."""
     with conn.cursor() as cur:
         cur.execute(CREATE_TABLE_SQL)
     conn.commit()
@@ -72,6 +76,7 @@ def ensure_table(conn: psycopg2.extensions.connection):
 
 
 def order_to_row(order: dict) -> tuple:
+    """Convert a processed-order dict into a tuple matching the processed-orders table's column order."""
     return (
         order.get("order_id"),
         order.get("customer_id"),
@@ -92,6 +97,7 @@ def flush_batch(
     batch:   list[tuple],
     consumer: Consumer,
 ) -> int:
+    """Upsert `batch` into PostgreSQL and commit the Kafka offset, rolling back on failure."""
     if not batch:
         return 0
 
@@ -110,6 +116,7 @@ def flush_batch(
 
 
 def run():
+    """Consume processed orders, buffer them into batches, and flush to PostgreSQL on size or timeout."""
     # Kafka Consumer
     kafka_consumer = Consumer({
         "bootstrap.servers":  settings.KAFKA_BROKER,
@@ -143,7 +150,7 @@ def run():
                 batch.append(order_to_row(order))
                 log.info(
                     f"Buffered [{len(batch)}/{settings.PG_BATCH_SIZE}] "
-                    f"order_id={order.get('order_id', '?')[:8]}... "
+                    f"order_id={str(order.get('order_id', '?'))[:ID_PREVIEW_LEN]}... "
                     f"customer={order.get('customer_id')} "
                     f"total=${order.get('total', 0):.2f}"
                 )
