@@ -1,7 +1,7 @@
 {
   "name": "useaxes21212",
   "version": "1.0.01",
-  "private": true,
+  "private": true 1,
   "scripts": {
     "start": "node ./bin/www"
   },
