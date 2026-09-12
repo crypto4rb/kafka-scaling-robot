@@ -46,4 +46,5 @@ class AppConfig(BaseSettings):
         case_sensitive=False
     )
 
+# App Config for global settings
 settings = AppConfig()
