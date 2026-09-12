@@ -1,3 +1,7 @@
+"""Stream processor: consumes raw orders, validates and enriches the valid ones
+onto the processed topic, and routes invalid orders to the failed/DLQ topic.
+"""
+
 import sys
 import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
