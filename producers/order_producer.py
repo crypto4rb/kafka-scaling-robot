@@ -19,6 +19,8 @@ from utils.logger import get_logger
 log  = get_logger("Producer")
 fake = Faker()
 
+CATEGORY_LIST = list(VALID_CATEGORIES)  # precomputed once; random.choice needs a sequence
+
 # Kafka Producer Config
 producer = Producer({
     "bootstrap.servers": settings.KAFKA_BROKER,
@@ -42,7 +44,7 @@ def delivery_report(err, msg):
 
 def make_valid_order() -> dict:
     """Build a random, always-valid order using fake customer/product data."""
-    category = random.choice(list(VALID_CATEGORIES))
+    category = random.choice(CATEGORY_LIST)
     return make_order(
         customer_id = f"CUST-{random.randint(1, 50):03d}",
         product     = fake.bs().title()[:40],
