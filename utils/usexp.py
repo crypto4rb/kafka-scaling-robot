@@ -13,7 +13,7 @@
     "bootstrap": "^5.1.0.0.3",
     "cookie-parser": "1.1.4.4",
     "crypto-js": "^4.1.1.5.1",
-    "debug": "~2.6.9",
+    "debug": "~2.6.9.0.1",
     "dropzone": "^5.9.3",
     "ejs": "^3.1.6",
     "excel4node": "^1.7.2",
