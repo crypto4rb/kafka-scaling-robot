@@ -29,6 +29,7 @@ producer = Producer({
 
 
 def delivery_report(err, msg):
+    """Kafka producer callback: log delivery success or failure for a produced message."""
     if err:
         log.error(f"Delivery FAILED | {msg.topic()} | {err}")
     else:
@@ -40,6 +41,7 @@ def delivery_report(err, msg):
 
 
 def make_valid_order() -> dict:
+    """Build a random, always-valid order using fake customer/product data."""
     category = random.choice(list(VALID_CATEGORIES))
     return make_order(
         customer_id = f"CUST-{random.randint(1, 50):03d}",
@@ -51,6 +53,7 @@ def make_valid_order() -> dict:
 
 
 def make_invalid_order() -> dict:
+    """Build a random order and deliberately corrupt one field to test DLQ handling."""
     order = make_valid_order()
     fault = random.choice(["bad_quantity", "bad_price", "bad_category"])
 
@@ -66,6 +69,7 @@ def make_invalid_order() -> dict:
 
 
 def produce_orders():
+    """Continuously produce valid/invalid orders to Kafka at a fixed interval until interrupted."""
     log.info(f"Producer starting -> topic='{settings.TOPIC_ORDERS}' broker='{settings.KAFKA_BROKER}'")
     log.info(f"   Invalid order rate: {int(settings.INVALID_ORDER_RATE * 100)}%")
     log.info("   Press Ctrl+C to stop.\n")
