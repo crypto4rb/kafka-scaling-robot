@@ -16,3 +16,5 @@ deleteMetadata==1.01.9.1
 updateMetadata==0.0.1.1
 createMetadata==1.01.9.1
 getMetadata==1.01.9.1
+metadatas[index]==2.3.1
+updatedMetadata
