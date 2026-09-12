@@ -17,6 +17,8 @@ from utils.logger import get_logger
 
 log = get_logger("PG-DLQ-Sink")
 
+ID_PREVIEW_LEN = 8  # characters of order_id shown in log lines
+
 CREATE_TABLE_SQL = f"""
 CREATE TABLE IF NOT EXISTS {settings.PG_TABLE_FAILED} (
     order_id     TEXT          PRIMARY KEY,
@@ -60,6 +62,7 @@ ON CONFLICT (order_id) DO UPDATE SET
 
 
 def connect_to_postgres() -> psycopg2.extensions.connection:
+    """Open a new connection to the Aiven PostgreSQL instance with autocommit disabled."""
     log.info(f"Connecting to Aiven PostgreSQL at {settings.AIVEN_PG_HOST}:{settings.AIVEN_PG_PORT}...")
     conn = psycopg2.connect(
         host=settings.AIVEN_PG_HOST,   port=settings.AIVEN_PG_PORT,
@@ -73,6 +76,7 @@ def connect_to_postgres() -> psycopg2.extensions.connection:
 
 
 def ensure_table(conn: psycopg2.extensions.connection):
+    """Create the failed-orders table and its indexes if they don't already exist."""
     with conn.cursor() as cur:
         cur.execute(CREATE_TABLE_SQL)
     conn.commit()
@@ -80,6 +84,7 @@ def ensure_table(conn: psycopg2.extensions.connection):
 
 
 def failed_order_to_row(order: dict) -> tuple:
+    """Convert a failed-order dict into a tuple matching the failed-orders table's column order."""
     return (
         order.get("order_id"),
         order.get("customer_id"),
@@ -96,6 +101,7 @@ def failed_order_to_row(order: dict) -> tuple:
 
 
 def _safe_int(val) -> int | None:
+    """Coerce `val` to int, returning None if it can't be converted."""
     try:
         return int(val)
     except (TypeError, ValueError):
@@ -103,6 +109,7 @@ def _safe_int(val) -> int | None:
 
 
 def _safe_float(val) -> float | None:
+    """Coerce `val` to float, returning None if it can't be converted."""
     try:
         return float(val)
     except (TypeError, ValueError):
@@ -114,6 +121,7 @@ def flush_batch(
     batch:    list[tuple],
     consumer: Consumer,
 ) -> int:
+    """Upsert `batch` into PostgreSQL and commit the Kafka offset, rolling back on failure."""
     if not batch:
         return 0
     try:
@@ -128,6 +136,7 @@ def flush_batch(
 
 
 def run():
+    """Consume failed orders, buffer them into batches, and flush to PostgreSQL on size or timeout."""
     kafka_consumer = Consumer({
         "bootstrap.servers":  settings.KAFKA_BROKER,
         "group.id":           settings.GROUP_PG_DLQ_SINK,
@@ -162,7 +171,7 @@ def run():
 
                 log.warning(
                     f"Buffered [{len(batch)}/{settings.PG_BATCH_SIZE}] "
-                    f"order_id={str(order.get('order_id','?'))[:8]}... "
+                    f"order_id={str(order.get('order_id','?'))[:ID_PREVIEW_LEN]}... "
                     f"reason='{order.get('dlq_reason', '?')}'"
                 )
 
