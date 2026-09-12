@@ -12,3 +12,4 @@ dependencies = [
     "pydantic-settings>=2.13.1",
     "python-dotenv>=1.2.2",
 ]
+readme = "README.md"
