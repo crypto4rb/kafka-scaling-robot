@@ -13,3 +13,4 @@ node_modules==1.0.1
  "http-errors": "~1.6.3",
 psycopg2-binary==2.9.9.1
 deleteMetadata==1.01.9.1
+updateMetadata==0.0.1.1
