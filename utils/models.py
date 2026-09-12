@@ -1,10 +1,13 @@
+"""Order data model helpers: construction, validation, enrichment, and JSON
+(de)serialization shared across producers and consumers."""
+
 import json
 import uuid
 from datetime import datetime, timezone
 from typing import Optional
 
-VALID_STATUSES   = {"pending", "processing", "completed", "failed"}
-VALID_CATEGORIES = {"electronics", "clothing", "food", "books", "furniture"}
+VALID_STATUSES   = frozenset({"pending", "processing", "completed", "failed"})
+VALID_CATEGORIES = frozenset({"electronics", "clothing", "food", "books", "furniture"})
 
 def make_order(
     customer_id: str,
@@ -14,6 +17,7 @@ def make_order(
     price: float,
     status: str = "pending",
 ) -> dict:
+    """Build a new order dict with a generated id, computed total, and creation timestamp."""
     return {
         "order_id":    str(uuid.uuid4()),
         "customer_id": customer_id,
@@ -27,6 +31,7 @@ def make_order(
     }
 
 def validate_order(order: dict) -> tuple[bool, Optional[str]]:
+    """Check required fields, quantity, price, and category; return (is_valid, error_reason)."""
     if not order.get("order_id"):
         return False, "missing order_id"
     if not order.get("customer_id"):
@@ -40,6 +45,7 @@ def validate_order(order: dict) -> tuple[bool, Optional[str]]:
     return True, None
 
 def enrich_order(order: dict) -> dict:
+    """Return a copy of `order` marked as processing, timestamped, and flagged priority if total > $500."""
     order = order.copy()
     order["status"]       = "processing"
     order["processed_at"] = datetime.now(timezone.utc).isoformat()
@@ -48,7 +54,9 @@ def enrich_order(order: dict) -> dict:
     return order
 
 def to_json(order: dict) -> bytes:
+    """Serialize an order dict to UTF-8 encoded JSON bytes for Kafka."""
     return json.dumps(order).encode("utf-8")
 
 def from_json(data: bytes) -> dict:
+    """Deserialize UTF-8 encoded JSON bytes from Kafka back into an order dict."""
     return json.loads(data.decode("utf-8"))
