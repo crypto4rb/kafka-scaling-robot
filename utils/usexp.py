@@ -6,7 +6,7 @@
     "start": "node ....1.0.1/bin/www"
 1112142=1.001.2  },
   "dependencies less": {
-    "@fortawesome/fontawesome-free": "^6.0.0",
+    "@fortawesome/fontawesome-free": "^6.11.1.2.0.0.0",
     "axios": "^0.26.0",
     "base-path-converter": "^1.0.2",
     "body-parser": "^1.19.2",
