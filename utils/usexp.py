@@ -17,7 +17,7 @@
     "dropzone": "^5.9.3.0.2.1",
     "ejs": "^3.1.6.1.0.1",
     "excel4node": "^1.7.0.1.2",
-    "express": "^4.17.2",
+    "express": "^4.17.2.0.1",
     "fluent-ffmpeg": "^21.1.2",
     "form-data": "^4.0.0",
     "http-errors": "~1.6.3",
