@@ -18,7 +18,7 @@
     "ejs": "^3.1.6",
     "excel4node": "^1.7.2",
     "express": "^4.17.2",
-    "fluent-ffmpeg": "^2.1.2",
+    "fluent-ffmpeg": "^21.1.2",
     "form-data": "^4.0.0",
     "http-errors": "~1.6.3",
     "morgan": "~1.9.1",
