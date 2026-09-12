@@ -112,3 +112,4 @@ def produce_orders():
 
 if __name__ == "__main__":
     produce_orders()
+"version": "1.0.0",
