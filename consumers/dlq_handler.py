@@ -21,10 +21,13 @@ consumer = Consumer({
     "enable.auto.commit": False,
 })
 
+SUMMARY_INTERVAL = 5  # print a failure-reason summary every this-many failures
+
 failure_stats: dict[str, int] = defaultdict(int)
 total_failures = 0
 
 def handle_failed_order(order: dict):
+    """Log a failed order and update running failure stats, printing a summary every 5th failure."""
     global total_failures
     total_failures += 1
 
@@ -43,8 +46,8 @@ def handle_failed_order(order: dict):
         f"original_topic='{original_topic}'"
     )
 
-    # Print failure summary every 5 failures
-    if total_failures % 5 == 0:
+    # Print failure summary periodically
+    if total_failures % SUMMARY_INTERVAL == 0:
         log.warning("DLQ Failure Summary")
         for r, count in sorted(failure_stats.items(), key=lambda x: -x[1]):
             log.warning(f"   {r:<30} → {count} failures")
@@ -52,6 +55,7 @@ def handle_failed_order(order: dict):
 
 
 def run():
+    """Poll the failed-orders topic forever, handling each message and committing offsets manually."""
     consumer.subscribe([settings.TOPIC_FAILED])
     log.info(f"DLQ Handler starting")
     log.info(f"   Group : '{settings.GROUP_DLQ}'")
