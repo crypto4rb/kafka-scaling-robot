@@ -33,15 +33,17 @@ consumer = Consumer({
 
 
 def update_inventory(order: dict):
+    """Deduct the order's quantity from its category's stock, warning on unknown categories or low stock."""
     category = order.get("category", "unknown")
     quantity  = order.get("quantity", 0)
 
-    if category not in INVENTORY:
+    current_stock = INVENTORY.get(category)
+    if current_stock is None:
         log.warning(f"Unknown category '{category}' - skipping inventory update")
         return
 
-    INVENTORY[category] = max(0, INVENTORY[category] - quantity)
-    remaining = INVENTORY[category]
+    remaining = max(0, current_stock - quantity)
+    INVENTORY[category] = remaining
 
     log.info(
         f"Inventory update | category={category} | "
@@ -53,6 +55,7 @@ def update_inventory(order: dict):
 
 
 def run():
+    """Poll the processed-orders topic forever, updating inventory and committing offsets manually."""
     consumer.subscribe([settings.TOPIC_PROCESSED])
     log.info(f"Inventory Service starting")
     log.info(f"   Group : '{settings.GROUP_INVENTORY}'")
