@@ -1,3 +1,10 @@
+"""Create the project's Kafka topics if they don't already exist.
+
+Reads topic names, partition count, and replication factor from
+config.settings, then creates any missing topics on the configured
+Kafka broker. Run directly as a script to provision topics.
+"""
+
 import sys
 import os
 
