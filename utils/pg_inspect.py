@@ -1,3 +1,6 @@
+"""One-off CLI tool that connects to the Aiven PostgreSQL database and prints
+summary stats for processed orders and DLQ failures."""
+
 import sys
 import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
@@ -6,7 +9,10 @@ import psycopg2
 import psycopg2.extras
 from config.settings import settings
 
+LATEST_LIMIT = 5  # number of most-recent rows shown per section
+
 def main():
+    """Query and print order/DLQ summary stats from PostgreSQL, exiting if the connection fails."""
     print("  Aiven PostgreSQL Inspector")
 
     print(f"\nConnecting to {settings.AIVEN_PG_HOST}:{settings.AIVEN_PG_PORT}/{settings.AIVEN_PG_DBNAME}...")
@@ -60,7 +66,7 @@ def main():
                    quantity, total, priority, processed_at
             FROM {settings.PG_TABLE_ORDERS}
             ORDER BY inserted_at DESC
-            LIMIT 5
+            LIMIT {LATEST_LIMIT}
         """)
         latest = cur.fetchall()
 
@@ -100,7 +106,7 @@ def main():
                        quantity, price, dlq_reason, failed_at
                 FROM {settings.PG_TABLE_FAILED}
                 ORDER BY failed_at DESC
-                LIMIT 5
+                LIMIT {LATEST_LIMIT}
             """)
             dlq_latest = cur.fetchall()
 
@@ -124,7 +130,7 @@ def main():
         )
     print()
 
-    print("  Latest 5 orders (most recent first)")
+    print(f"  Latest {LATEST_LIMIT} orders (most recent first)")
     for row in latest:
         print(
             f"  {str(row['order_id'])[:8]}... "
@@ -154,7 +160,7 @@ def main():
                 )
  
         if dlq_latest:
-            print("  Latest 5 failures (most recent first)")
+            print(f"  Latest {LATEST_LIMIT} failures (most recent first)")
             for row in dlq_latest:
                 print(
                     f"  {str(row['order_id'])[:8]}... "
