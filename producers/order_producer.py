@@ -1,3 +1,7 @@
+"""Order producer: continuously generates fake orders (occasionally invalid, by
+design) and publishes them to the orders topic for the pipeline to consume.
+"""
+
 import sys
 import os
 import time
