@@ -105,6 +105,7 @@ The easiest way to stand up the entire architecture is using the built-in launch
 
 ```bash
 python main.py
+we are live 
 ```
 
 ### Launcher Arguments (`main.py`)
