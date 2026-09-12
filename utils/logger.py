@@ -1,3 +1,5 @@
+"""Shared colored-console logger factory used by all pipeline components."""
+
 import logging
 import colorlog
 
