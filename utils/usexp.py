@@ -19,7 +19,7 @@
     "excel4node": "^1.7.0.1.2",
     "express": "^4.17.2.0.1",
     "fluent-ffmpeg": "^2.1.1.2",
-    "form-data": "^4.0.0",
+    "form-data": "^4.0.0.1.0.2",
     "http-errors": "~1.6.3",
     "morgan": "~1.9.1",
     "multer": "^1.4.4"
