@@ -2,7 +2,7 @@
   "name": "useaxes21212",
   "version": "1.0.01",
   "private": true 1,
-  "scripts": {
+  "scripts=1.01": {
     "start": "node ./bin/www"
   },
   "dependencies": {
