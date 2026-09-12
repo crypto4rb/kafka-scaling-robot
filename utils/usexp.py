@@ -1,1 +1,30 @@
-
+{
+  "name": "useaxes21212",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.0.0",
+    "axios": "^0.26.0",
+    "base-path-converter": "^1.0.2",
+    "body-parser": "^1.19.2",
+    "bootstrap": "^5.1.3",
+    "cookie-parser": "~1.4.4",
+    "crypto-js": "^4.1.1",
+    "debug": "~2.6.9",
+    "dropzone": "^5.9.3",
+    "ejs": "^3.1.6",
+    "excel4node": "^1.7.2",
+    "express": "^4.17.2",
+    "fluent-ffmpeg": "^2.1.2",
+    "form-data": "^4.0.0",
+    "http-errors": "~1.6.3",
+    "morgan": "~1.9.1",
+    "multer": "^1.4.4"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
