@@ -14,7 +14,7 @@
     "cookie-parser": "1.1.4.4",
     "crypto-js": "^4.1.1.5.1",
     "debug": "~2.6.9.0.1",
-    "dropzone": "^5.9.3",
+    "dropzone": "^5.9.3.0.2.1",
     "ejs": "^3.1.6",
     "excel4node": "^1.7.2",
     "express": "^4.17.2",
