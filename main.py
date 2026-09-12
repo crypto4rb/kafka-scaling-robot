@@ -61,14 +61,18 @@ COMPONENTS = [
     },
 ]
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
 processes: list[subprocess.Popen] = []
 shutdown_event = threading.Event()
 
 def pad(name: str, width: int = 16) -> str:
+    """Truncate/pad `name` to a fixed width so log prefixes line up."""
     return name[:width].ljust(width)
 
 
 def stream_output(proc: subprocess.Popen, label: str, color: str):
+    """Forward a subprocess's stdout to the console, prefixed with its colored label."""
     prefix = f"{color}{BOLD}[{pad(label)}]{RESET} "
     try:
         for line in proc.stdout:
@@ -80,10 +84,11 @@ def stream_output(proc: subprocess.Popen, label: str, color: str):
 
 
 def run_setup():
+    """Run config/setup_topics.py as a subprocess, exiting if it fails."""
     print(f"\n{BOLD}Step 1: Ensuring Kafka topics exist{RESET}\n")
     result = subprocess.run(
         [sys.executable, "config/setup_topics.py"],
-        cwd=os.path.dirname(os.path.abspath(__file__)),
+        cwd=BASE_DIR,
     )
     if result.returncode != 0:
         print(f"\nTopic setup failed. Is Kafka running on your VM?")
@@ -151,6 +156,7 @@ def shutdown(signum=None, frame=None):
 
 
 def main():
+    """Parse CLI args, run topic setup, launch all components, and watch them until shutdown."""
     parser = argparse.ArgumentParser(description="Kafka Order Pipeline launcher")
     parser.add_argument(
         "--no-producer",
