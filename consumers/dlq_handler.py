@@ -1,3 +1,7 @@
+"""DLQ handler: consumes failed orders from the dead-letter topic, logs each
+failure, and periodically prints a summary of failure reasons.
+"""
+
 import sys
 import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
