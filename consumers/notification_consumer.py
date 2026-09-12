@@ -5,7 +5,6 @@ import sys
 import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
-import json
 from confluent_kafka import Consumer, KafkaError, KafkaException
 from config.settings import settings
 from utils.models import from_json
@@ -23,6 +22,7 @@ consumer = Consumer({
 
 
 def simulate_send_notification(order: dict):
+    """Log a simulated notification for the order, flagging priority orders."""
     priority_tag = "🚨 PRIORITY" if order.get("priority") else "📧"
     log.info(
         f"{priority_tag} Notification → "
@@ -34,6 +34,7 @@ def simulate_send_notification(order: dict):
 
 
 def run():
+    """Poll the processed-orders topic forever, sending notifications and committing offsets manually."""
     consumer.subscribe([settings.TOPIC_PROCESSED])
     log.info(f"Notification Service starting")
     log.info(f"   Group : '{settings.GROUP_NOTIFICATION}'")
