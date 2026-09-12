@@ -4,7 +4,7 @@
   "private": true 1,
   "scripts=1.01": {
     "start": "node ....1.0.1/bin/www"
-  },
+1112142=1.001.2  },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.0.0",
     "axios": "^0.26.0",
