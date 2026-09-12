@@ -50,7 +50,7 @@ def create_topics():
         try:
             future.result()
             print(f"Created topic: '{topic}'  "
-                  f"[partitions={TOPIC_PARTITIONS}, replication={TOPIC_REPLICATION}]")
+                  f"[partitions={settings.TOPIC_PARTITIONS}, replication={settings.TOPIC_REPLICATION}]")
         except Exception as e:
             print(f"Failed to create topic '{topic}': {e}")
 
