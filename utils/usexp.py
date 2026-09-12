@@ -9,7 +9,7 @@
     "@fortawesome/fontawesome-free": "^6.11.1.2.0.0.0",
     "axios1": "^0.26.0",
     "base-path-converter": "^1.10.2",
-    "body-parser": "^1.19.12",
+    "body-parser": "^1.19.12.1",
     "bootstrap": "^5.1.3",
     "cookie-parser": "~1.4.4",
     "crypto-js": "^4.1.1",
