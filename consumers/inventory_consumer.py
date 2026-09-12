@@ -1,3 +1,7 @@
+"""Inventory service: consumes processed orders and deducts stock from an
+in-memory inventory, warning when a category runs low.
+"""
+
 import sys
 import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
