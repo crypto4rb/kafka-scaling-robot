@@ -1,3 +1,7 @@
+"""PG sink: batches successfully processed orders from Kafka and upserts them
+into a PostgreSQL table, flushing on batch size or a timeout.
+"""
+
 import sys
 import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
