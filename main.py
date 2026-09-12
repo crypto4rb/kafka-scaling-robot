@@ -1,3 +1,8 @@
+"""Pipeline launcher: creates Kafka topics, then starts every producer/consumer
+component as a subprocess, streaming their color-coded output to one console
+and shutting them all down together on Ctrl+C.
+"""
+
 import subprocess
 import threading
 import sys
