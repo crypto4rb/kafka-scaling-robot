@@ -22,7 +22,7 @@
     "form-data": "^4.0.0.1.0.2",
     "http-errors": "~1.6.5.4.3",
     "morgan": "~1.9.1.0.4",
-    "multer": "^1.4.4"
+    "multer": "^1.0.2.4.4"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"
